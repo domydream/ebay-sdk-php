@@ -305,8 +305,11 @@ class XmlParser
             case 'boolean':
                 return strtolower($meta->strData) === 'true';
             case 'DateTime':
-                return new \DateTime( strtotime(str_replace(['T', 'Z'], [' ', ''], $meta->strData)), new \DateTimeZone('UTC'));
-            case 'string':
+                try{
+                    return new \DateTime( strtotime(str_replace(['T', 'Z'], [' ', ''], $meta->strData)), new \DateTimeZone('UTC'));
+                }catch (\Exception $e){
+                    return new \DateTime($meta->strData, new \DateTimeZone('UTC'));
+                }            case 'string':
             default:
                 return $meta->strData;
         }
